@@ -3,6 +3,7 @@ Author : Tanawat Kusungnoen
          Phakphum Charuspan
 Last update : 19/11/2557
 """
+print 'Test'
 from Tkinter import *
 class App(object):
     """first class an interface"""
