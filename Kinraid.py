@@ -129,8 +129,27 @@ class Addmenu(object):
     def __init__(self):
         """ main method """
         self.root = Tk()
-        self.root.geometry("605x505+400+100")
-        self.root.title("KinraiD")    
+        self.root.geometry("305x505+600+100")
+        self.root.title("KinraiD")
+
+        #---Background Image---#
+        bg_add = PhotoImage(file = "testbg_add.gif")
+        b_add = Label(self.root, image = bg_add)
+        b_add.place(x=0, y=0)
+
+        #---Button---#
+        back_button = PhotoImage(file = "back_but.gif")
+        backbut = Button(self.root, bg = "white", image = back_button,
+                         command = self.back)
+        backbut.place(x=180, y=420)
+        
+
+        self.root.mainloop()
+
+    def back(self):
+        """ back to main page """
+        self.root.destroy()
+        Main()
 
 class Helpus(object):
     """ class to input user's money and say what do you eat """
