@@ -1,3 +1,4 @@
+# -*- coding: cp874 -*-
 """KinraiD
 Author : Tanawat Kusungnoen
          Phakphum Charuspan
@@ -5,6 +6,9 @@ Language : Python 2.7.8
 Last update : 8/12/2557
 """
 from Tkinter import *
+from db import db
+con = db()
+cur = con.cursor()
 class Interface(object):
     """ first class an interface """
     def __init__(self):
@@ -142,6 +146,28 @@ class Addmenu(object):
         backbut = Button(self.root, bg = "white", image = back_button,
                          command = self.back)
         backbut.place(x=180, y=420)
+        addmenu_but = PhotoImage(file = "addmenubut.gif")
+        addmenubutton = Button(self.root, bg = "white", image = addmenu_but,
+                               command = self.tester).place(x=115, y=300)
+
+        #---Input Box---#
+        self.addfood = StringVar()
+        Entry(self.root, textvariable = self.addfood, bg = "white"
+              ).place(x=95, y=75)
+        self.addprice = IntVar()
+        Entry(self.root, textvariable = self.addprice, bg = "white"
+              ).place(x=95, y=150)
+        self.addname = StringVar()
+        Entry(self.root, textvariable = self.addname, bg = "white"
+              ).place(x=95, y=225)
+
+        #---Label Text---#
+        food_text = Label(self.root, text = "Menu", bg = "#ffd87e"
+                          ).place(x=140, y=50)
+        price_text = Label(self.root, text = "Price", bg = "#ffd87e"
+                           ).place(x=140, y=125)
+        name_text = Label(self.root, text = "Restaurant Name", bg = "#ffd87e"
+                          ).place(x=108, y=200)
         
 
         self.root.mainloop()
@@ -150,6 +176,12 @@ class Addmenu(object):
         """ back to main page """
         self.root.destroy()
         Main()
+
+    def tester(self):
+        pp = self.addprice.get()
+        food = self.addfood.get()
+        cur.execute("INSERT INTO menu(name, price, shop_id) VALUES ('{}', {}, 1)".format(food, pp))
+        con.commit()
 
 class Helpus(object):
     """ class to input user's money and say what do you eat """
