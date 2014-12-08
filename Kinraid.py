@@ -1,9 +1,9 @@
 """KinraiD
 Author : Tanawat Kusungnoen
          Phakphum Charuspan
-Last update : 19/11/2557
+Language : Python 2.7.8
+Last update : 8/12/2557
 """
-print 'Test'
 from Tkinter import *
 class Interface(object):
     """ first class an interface """
