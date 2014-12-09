@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 """KinraiD
 Author : Tanawat Kusungnoen
-         Phakphum Charuspan
+         Phakphum Charatphan
 Language : Python 2.7.8
 Last update : 9/12/2557
 """
 from Tkinter import *
 from db import db
+import random
 con = db()
 cur = con.cursor()
 class Interface(object):
@@ -101,7 +102,8 @@ class Eating(object):
         go_button = PhotoImage(file = "go_but.gif")
         backbut = Button(self.root, bg = "white", image = back_button,
                          command = self.back)
-        gobut = Button(self.root, bg = "white", image = go_button)
+        gobut = Button(self.root, bg = "white", image = go_button,
+                       command = self.randomnow)
         backbut.place(x=280, y=420)
         gobut.place(x=280, y=170)
 
@@ -109,9 +111,30 @@ class Eating(object):
         self.entrymoney = IntVar()
         Entry(self.root, textvariable = self.entrymoney, bg = "pink"
               ).place(x=170, y=50)
-        self.name = StringVar()
-        Entry(self.root, textvariable = self.name, bg = "pink"
-              ).place(x=170, y=80)
+        self.result_m = StringVar()
+        Entry(self.root, textvariable = self.result_m, bg = "white"
+              ).place(x=260, y=280)
+        self.result_p = StringVar()
+        Entry(self.root, textvariable = self.result_p, bg = "white"
+              ).place(x=260, y=320)
+        self.result_n = StringVar()
+        Entry(self.root, textvariable = self.result_n, bg = "white"
+              ).place(x=260, y=360)
+
+        #---Option Menu---#
+        cur.execute("SELECT * FROM shop")
+        name_list = cur.fetchall()
+        
+        self.alist = ['Random']
+        self.dic = {}
+        
+        for shop in name_list:
+            self.alist.append(shop[1])
+            self.dic[shop[1]] = shop[0]
+            
+        self.variable_name = StringVar()
+        self.option_name = OptionMenu(self.root, self.variable_name, *self.alist).place(x=170, y=75)
+        self.variable_name.set(self.alist[0])
 
         #---Label text---#
         money_text = Label(self.root, text = "Money :", bg = "white"
@@ -120,13 +143,43 @@ class Eating(object):
                           ).place(x=66, y=80)
         baht_text = Label(self.root, text = "Baht", bg = "white"
                           ).place(x=300, y=50)
-        
+        resultt = Label(self.root, text = "Result", bg = "#fdd1d5",
+                        font = ("Courier", 14, "bold")).place(x=315, y=235)
+        resultm = Label(self.root, text = "Menu", bg = "#fdd1d5"
+                        ).place(x=260, y=257)
+        resultp = Label(self.root, text = "Price", bg = "#fdd1d5"
+                        ).place(x=260, y=299)
+        resultn = Label(self.root, text = "Restuarant name", bg = "#fdd1d5"
+                        ).place(x=260, y=339)
+
         self.root.mainloop()
 
     def back(self):
         """ back to main page """
         self.root.destroy()
         Main()
+
+    def randomnow(self):
+        """ random result """
+        word = self.variable_name.get()
+        moneyuser = self.entrymoney.get()
+        if word == 'Random':
+            shopid = random.choice(self.dic.values())
+        else:
+            shopid = self.dic.get(word)
+        cur.execute("SELECT id FROM menu WHERE price <= '{}' AND shop_id = '{}'".format(moneyuser, shopid))
+        id_all = cur.fetchall()
+        id_list = []
+        for m_id in id_all:
+            id_list.append(m_id[0])
+        rand_id = random.choice(id_list)
+        cur.execute("SELECT name,price FROM menu WHERE id = {}".format(rand_id))
+        res = cur.fetchall()
+        for resn in self.dic:
+            if self.dic[resn] == shopid:
+                self.result_n.set(resn)
+        self.result_m.set(res[0][0])
+        self.result_p.set(res[0][1])
         
 class Addmenu(object):
     """ class to input user's money and say what do you eat """
@@ -158,8 +211,7 @@ class Addmenu(object):
         Entry(self.root, textvariable = self.addprice, bg = "white"
               ).place(x=95, y=150)
         self.addname = StringVar()
-        Entry(self.root, width=24, textvariable = self.addname, bg = "white"
-              ).place(x=95, y=225)
+        Entry(self.root, width=24, textvariable = self.addname, bg = "white").place(x=95, y=225)
 
         #---Option Menu---#
         cur.execute("SELECT * FROM shop")
@@ -192,6 +244,7 @@ class Addmenu(object):
         Main()
 
     def confirm(self):
+        """ method to confirm add menu to Database """
         pp = self.addprice.get()
         food = self.addfood.get()
         rest = self.addname.get()
