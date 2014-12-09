@@ -8,13 +8,8 @@ Last update : 9/12/2557
 """
 from Tkinter import *
 from db import db
-##import sys
-##reload(sys)
-##sys.setdefaultencoding('utf-8')
 con = db()
 cur = con.cursor()
-##cur.execute("SET NAMES 'utf8'")
-##cur.execute("SET CHARACTER SET utf8")
 class Interface(object):
     """ first class an interface """
     def __init__(self):
@@ -126,7 +121,6 @@ class Eating(object):
         baht_text = Label(self.root, text = "Baht", bg = "white"
                           ).place(x=300, y=50)
         
-
         self.root.mainloop()
 
     def back(self):
@@ -164,8 +158,8 @@ class Addmenu(object):
         Entry(self.root, textvariable = self.addprice, bg = "white"
               ).place(x=95, y=150)
         self.addname = StringVar()
-        Entry(self.root, width=24, textvariable = self.addname, font=(
-            "AngsanaUPC", 11, "bold"), bg = "white").place(x=95, y=225)
+        Entry(self.root, width=24, textvariable = self.addname, bg = "white"
+              ).place(x=95, y=225)
 
         #---Option Menu---#
         cur.execute("SELECT * FROM shop")
@@ -190,7 +184,6 @@ class Addmenu(object):
         name_text = Label(self.root, text = "Restaurant Name", bg = "#ffd87e"
                           ).place(x=108, y=200)
         
-
         self.root.mainloop()
 
     def back(self):
