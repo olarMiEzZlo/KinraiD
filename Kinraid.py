@@ -271,12 +271,59 @@ class Helpus(object):
         self.root.geometry("605x505+400+100")
         self.root.title("KinraiD")
 
+        #---Button---#
+        back_button = PhotoImage(file = "back_but.gif")
+        backbut = Button(self.root, bg = "white", image = back_button,
+                         command = self.back)
+        backbut.place(x=180, y=420)
+
+        self.root.mainloop()
+
+    def back(self):
+        """ back to main page """
+        self.root.destroy()
+        Main()
+
 class About(object):
     """ class to input user's money and say what do you eat """
     def __init__(self):
         """ main method """
         self.root = Tk()
-        self.root.geometry("605x505+400+100")
+        self.root.geometry("405x305+400+100")
         self.root.title("KinraiD")
+
+        #---Background Image---#
+        bg_about = PhotoImage(file = "about_bg.gif")
+        b_about = Label(self.root, image = bg_about)
+        b_about.place(x=0, y=0)
+
+        #---Label Text---#
+        ver_text = Label(self.root, text = "Version", font = (
+            "Courier", 14), bg = "#abff9b").place(x=165, y=25)
+        vers = Label(self.root, text = "KinraiD V.1.0.1", font =(
+            "Courier", 11), bg = "#abff9b").place(x=134, y=50)
+        aut_text = Label(self.root, text = "Author", font = (
+            "Courier", 14), bg = "#abff9b").place(x=172, y=90)
+        aut1 = Label(self.root, text = "Mr.Tanawat Kusungnoen  57070025",
+                     font = ("Courier", 11), bg = "#abff9b").place(x=70, y=115)
+        aut2 = Label(self.root, text = "Mr.Phakphum Charatphan  57070088",
+                     font = ("Courier", 11), bg = "#abff9b").place(x=66, y=137)
+        cre_text = Label(self.root, text = "Credit Database", font = (
+            "Courier", 14), bg = "#abff9b").place(x=128, y=175)
+        credit = Label(self.root, text = "Mr.Nonpawit Teerachetmongkol",
+                       font = ("Courier", 11), bg="#abff9b").place(x=85, y=200)
+
+        #---Button---#
+        back_button = PhotoImage(file = "back_but.gif")
+        backbut = Button(self.root, bg = "white", image = back_button,
+                         command = self.back)
+        backbut.place(x=300, y=240)
+
+        self.root.mainloop()
+
+    def back(self):
+        """ back to main page """
+        self.root.destroy()
+        Main()
         
 Interface()
