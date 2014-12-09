@@ -1,14 +1,20 @@
-# -*- coding: cp874 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """KinraiD
 Author : Tanawat Kusungnoen
          Phakphum Charuspan
 Language : Python 2.7.8
-Last update : 8/12/2557
+Last update : 9/12/2557
 """
 from Tkinter import *
 from db import db
+##import sys
+##reload(sys)
+##sys.setdefaultencoding('utf-8')
 con = db()
 cur = con.cursor()
+##cur.execute("SET NAMES 'utf8'")
+##cur.execute("SET CHARACTER SET utf8")
 class Interface(object):
     """ first class an interface """
     def __init__(self):
@@ -148,7 +154,7 @@ class Addmenu(object):
         backbut.place(x=180, y=420)
         addmenu_but = PhotoImage(file = "addmenubut.gif")
         addmenubutton = Button(self.root, bg = "white", image = addmenu_but,
-                               command = self.tester).place(x=115, y=300)
+                               command = self.confirm).place(x=115, y=300)
 
         #---Input Box---#
         self.addfood = StringVar()
@@ -158,8 +164,23 @@ class Addmenu(object):
         Entry(self.root, textvariable = self.addprice, bg = "white"
               ).place(x=95, y=150)
         self.addname = StringVar()
-        Entry(self.root, textvariable = self.addname, bg = "white"
-              ).place(x=95, y=225)
+        Entry(self.root, width=24, textvariable = self.addname, font=(
+            "AngsanaUPC", 11, "bold"), bg = "white").place(x=95, y=225)
+
+        #---Option Menu---#
+        cur.execute("SELECT * FROM shop")
+        name_list = cur.fetchall()
+        
+        self.alist = []
+        self.dic = {}
+        
+        for shop in name_list:
+            self.alist.append(shop[1])
+            self.dic[shop[1]] = shop[0]
+            
+        self.variable_name = StringVar()
+        self.option_name = OptionMenu(self.root, self.variable_name, *self.alist).place(x=95, y=250)
+        self.variable_name.set(self.alist[0])
 
         #---Label Text---#
         food_text = Label(self.root, text = "Menu", bg = "#ffd87e"
@@ -177,11 +198,23 @@ class Addmenu(object):
         self.root.destroy()
         Main()
 
-    def tester(self):
+    def confirm(self):
         pp = self.addprice.get()
         food = self.addfood.get()
-        cur.execute("INSERT INTO menu(name, price, shop_id) VALUES ('{}', {}, 1)".format(food, pp))
-        con.commit()
+        rest = self.addname.get()
+        if rest == "":
+            shopid = self.dic.get(self.variable_name.get())
+
+            cur.execute("INSERT INTO menu(name, price, shop_id) VALUES ('{}', {}, {})".format(food, pp, shopid))
+            con.commit()
+        else:
+            cur.execute("INSERT INTO shop(name) VALUES ('{}')".format(rest))
+            con.commit()
+            cur.execute("SELECT id FROM shop WHERE name = '{}'".format(rest))
+            shopid = cur.fetchone()[0]
+            cur.execute("INSERT INTO menu(name, price, shop_id) VALUES ('{}', {}, '{}')".format(food, pp, shopid))
+            con.commit()
+        self.back()
 
 class Helpus(object):
     """ class to input user's money and say what do you eat """
