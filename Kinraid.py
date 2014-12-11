@@ -212,7 +212,8 @@ class Addmenu(object):
         Entry(self.root, textvariable = self.addprice, bg = "white"
               ).place(x=95, y=150)
         self.addname = StringVar()
-        Entry(self.root, width=24, textvariable = self.addname, bg = "white").place(x=95, y=225)
+        Entry(self.root, textvariable = self.addname, bg = "white"
+              ).place(x=95, y=225)
 
         #---Option Menu---#
         cur.execute("SELECT * FROM shop")
@@ -236,6 +237,10 @@ class Addmenu(object):
                            ).place(x=140, y=125)
         name_text = Label(self.root, text = "Restaurant Name", bg = "#ffd87e"
                           ).place(x=108, y=200)
+        select_add = Label(self.root, text = "Add new", bg = "#ffd87e"
+                           ).place(x=35, y=225)
+        select = Label(self.root, text = "or Select", bg = "#ffd87e"
+                       ).place(x=35, y=255)
         
         self.root.mainloop()
 
@@ -268,14 +273,18 @@ class Helpus(object):
     def __init__(self):
         """ main method """
         self.root = Tk()
-        self.root.geometry("605x505+400+100")
+        self.root.geometry("1305x505+30+100")
         self.root.title("KinraiD")
 
-        #---Button---#
-        back_button = PhotoImage(file = "back_but.gif")
-        backbut = Button(self.root, bg = "white", image = back_button,
-                         command = self.back)
-        backbut.place(x=180, y=420)
+        #---Back button---#
+        backbar = Menu(self.root)
+        backbar.add_cascade(label="Back", command = self.back)
+        self.root.config(menu=backbar)
+
+        #---Background Image---#
+        bg_help = PhotoImage(file = "help_pic.gif")
+        bg_h = Label(self.root, image = bg_help)
+        bg_h.place(x=0, y=0)
 
         self.root.mainloop()
 
