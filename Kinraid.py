@@ -5,7 +5,7 @@ Author : Tanawat Kusungnoen
          Phakphum Charatphan
 Language : Python 2.7.8
          : SQL
-Last update : 9/12/2557
+Last update : 13/12/2557
 """
 from Tkinter import *
 from db import db
